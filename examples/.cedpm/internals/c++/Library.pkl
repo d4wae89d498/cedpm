@@ -1,0 +1,4 @@
+module CppLibrary
+
+amends "@build-system/Library.pkl"
+

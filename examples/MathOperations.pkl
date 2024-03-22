@@ -1,0 +1,17 @@
+amends "@build-system/Manifest.pkl"
+import "@c++/Executable.pkl" as CppExecutable
+
+
+targets {
+	new CppExecutable {
+		name = "./MathOps"
+		standard = "c++23"
+		debug = true
+		modules {
+//##!			cppmodsort $(find . -type f -name "*.cppm")
+		}
+		libraries {
+//##!			findprojectlibs
+		}
+	}.target()
+}

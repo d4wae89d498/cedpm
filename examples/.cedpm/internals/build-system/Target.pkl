@@ -1,0 +1,10 @@
+module Target
+
+import "./Instruction.pkl" as Instruction
+
+type: "Executable"|"Library"
+name: String
+
+
+
+instructions: Listing<Instruction>

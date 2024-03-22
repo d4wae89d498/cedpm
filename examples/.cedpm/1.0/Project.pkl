@@ -1,0 +1,19 @@
+module pkl.Project
+extends "./AppleProject.pkl" //as Project
+
+//extends "pkl:Project"
+
+//host_os_name: String
+
+//host_isa: String
+
+//host_endianess: "big"|"little"
+
+//class default_compiler {
+//	path: 	String
+//	flags: 	String
+//}
+
+//compilers: Mapping<String, default_compiler>
+
+//versions: Listing<String>

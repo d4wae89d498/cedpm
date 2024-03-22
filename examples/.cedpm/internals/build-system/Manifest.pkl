@@ -1,0 +1,8 @@
+module Manifest
+
+import "./Target.pkl" as Target
+
+
+targets: Listing<Target>?
+
+

@@ -1,0 +1,5 @@
+open module Builder
+
+sources: List<String>
+executable: String
+flags: String

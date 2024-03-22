@@ -1,0 +1,12 @@
+#!/bin/bash
+
+while IFS= read -r line; do
+    # Vérifie si la ligne commence par '##!'
+    if [[ $line == "##!"* ]]; then
+        # Extrait et exécute la commande
+        eval "${line:3}"
+    else
+        # Affiche la ligne telle quelle
+        echo "$line"
+    fi
+done

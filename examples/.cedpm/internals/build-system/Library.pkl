@@ -1,0 +1,13 @@
+module Executable
+
+import "Builder.pkl" as Builder
+
+name: String
+
+sources: Mapping<String, List<String>>
+
+builders: Mapping<String, Builder>
+
+linker: Builder
+
+archiver: Builder

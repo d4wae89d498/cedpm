@@ -1,0 +1,29 @@
+module BlogPage
+
+title = "My PKL Blog"
+
+header = Header(
+    H1("Welcome to My PKL Blog", id: "blogTitle"),
+    Nav(
+        Ul(
+            Li(A("Home", href: "/")),
+            Li(A("About", href: "/about")),
+            Li(A("Contact", href: "/contact"))
+        )
+    )
+)
+
+main = Main(
+    Article(
+        H2("Post One"),
+        P("This is the first post on my PKL blog. Here's some interesting content about PKL."),
+        P("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    ),
+    Article(
+        H2("Post Two"),
+        P("The second post dives deeper into the benefits of using PKL for configuration."),
+        P("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+    )
+)
+
+footer = Footer("Copyright © 2024 My PKL Blog")

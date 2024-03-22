@@ -1,0 +1,24 @@
+amends ".cedpm/project"
+
+name = "modspec"
+description = "A specification module "
+version = 0.2
+licence = "LGPL"
+repository = "https://github.com/dwa"
+
+dependancies {
+	["some_dep"] = 0.3
+}
+build_dependancies {
+
+}
+
+build = "build.cppm"
+commands {
+	["install"] = ""
+	["run"] = ""
+	["test"] = ""
+}
+files {
+	"f1"
+}

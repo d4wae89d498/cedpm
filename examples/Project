@@ -1,0 +1,29 @@
+
+//import "pkl:Project" as Project
+
+amends ".cedpm/1.0/Project.pkl"
+
+
+package {
+	name = "cs"
+	version = "1.0.1"
+	baseUri = "package://not/package@1.0.1"
+	packageZipUrl = "https://not"
+}
+
+dependencies {
+	["json_schema"] {
+		uri = "package://pkg.pkl-lang.org/pkl-pantry/org.json_schema.contrib@1.0.0"
+	}
+	["k8s"] {
+		uri = "package://pkg.pkl-lang.org/pkl-k8s/k8s@1.0.1"
+	}
+	["appEnvCluster"] {
+		uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib.appEnvCluster@1.0.0"
+	}
+	["c"] = import(".cedpm/internals/c/Project.pkl")
+	["c++"] = import(".cedpm/internals/c++/Project.pkl")
+	["build-system"] = import(".cedpm/internals/build-system/Project.pkl")
+}
+
+
