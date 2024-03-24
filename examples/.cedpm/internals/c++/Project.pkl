@@ -12,5 +12,6 @@ tests {}
 
 dependencies {
 	["build-system"] = import("../build-system/Project.pkl")
+	["utils"] = import("../utils/Project.pkl")
 }
 

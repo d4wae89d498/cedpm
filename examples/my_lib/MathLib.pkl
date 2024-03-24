@@ -1,9 +1,0 @@
-amends "@c++/Library.pkl"
-
-name = "./libmath.a"
-
-sources {
-	["c++-module"] = List ( "./**/*.cppm" )
-	["c++"] = List ( )
-	["c"] = List ( )
-}

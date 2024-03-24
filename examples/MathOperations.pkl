@@ -1,6 +1,6 @@
 amends "@build-system/Manifest.pkl"
 import "@c++/Executable.pkl" as CppExecutable
-
+import "@utils/os.pkl" as OS
 
 targets {
 	new CppExecutable {
@@ -8,10 +8,14 @@ targets {
 		standard = "c++23"
 		debug = true
 		modules {
-//##!			cppmodsort $(find . -type f -name "*.cppm")
+			... CppExecutable.findModules(".", "*.cppm")
+		}
+		compiledModulePath = (modulePath) ->
+			outputDir + OS.fileName(modulePath) + ".o"
+		sources {
+
 		}
 		libraries {
-//##!			findprojectlibs
 		}
 	}.target()
 }

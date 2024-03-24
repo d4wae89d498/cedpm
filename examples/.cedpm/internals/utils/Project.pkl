@@ -1,0 +1,15 @@
+
+amends ".cedpm/1.0/Project.pkl"
+
+package {
+  name = "utils"
+  version = "1.0.1"
+  baseUri = "package://not/package--@1.0.1"
+  packageZipUrl = "https://not--"
+}
+
+tests {}
+
+dependencies {
+}
+

@@ -1,5 +1,5 @@
 module Instruction
 
 inputs: Listing<String>
-output: String
+result: String
 command: String

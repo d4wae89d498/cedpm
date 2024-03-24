@@ -24,6 +24,7 @@ dependencies {
 	["c"] = import(".cedpm/internals/c/Project.pkl")
 	["c++"] = import(".cedpm/internals/c++/Project.pkl")
 	["build-system"] = import(".cedpm/internals/build-system/Project.pkl")
+	["utils"] = import(".cedpm/internals/utils/Project.pkl")
 }
 
 

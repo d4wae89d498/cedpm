@@ -3,9 +3,8 @@ extends "@build-system/Executable.pkl"
 
 import "@build-system/Target.pkl" as Target
 import "@build-system/Instruction.pkl" as Instruction
-
-
-
+import "@utils/string.pkl" as StringUtil
+import "@utils/os.pkl" as OS
 
 debug: Boolean = false;
 compiler: String = read("env:CXX")
@@ -13,63 +12,49 @@ standard: String = read("env:CXXSTANDARDS").split(" ").last;
 flags: String = read("env:CXXFLAGS")
 modules: Listing<String>
 libraries: Listing<String>
+sources: Listing<String>
 
-function encodeChar(str: String): String =
-	if (str == " ")
-		" "
-	else
-		str
+outputDir = "."
+compiledModulePath = (modulePath: String) ->
+		modulePath + ".o"
+precompiledModulePath = (modulePath: String) ->
+		modulePath + ".pcm"
 
-function encode_uri(str: String, idx: Number): String =
-	if (idx == str.length - 1)
-		encodeChar(str[idx])
-	else
-		encodeChar(str[idx]) + encode_uri(str, idx + 1);
+function findModules(dir: String, pattern: String): Listing<String> =
+	OS.cli("cppmodsort $(find "+ dir +" -type f -name \""+ pattern +"\")").split("\n").toListing()
 
-local test = read(encode_uri("cli://ls -lha", 0))
-
-function _catlst(lst: Listing<String>, idx: Number): String =
-	if (idx > lst.length - 1)
-		""
-	else if (idx == lst.length - 1)
-		lst[lst.length - 1]
-	else
-		lst[idx] + " " + _catlst(lst, idx + 1)
-
-function catlst(lst: Listing) = _catlst(lst, 0)
-
+// TODO: change this according compilers
 function target(): Target = new {
-	// TODO: change this according compilers
 	local compile_prefix = compiler
 		+ " "
 		+ flags
 		+ if (debug) " -g" else ""
 		+ " -std=" + standard;
-	name = "hello" + test.text
+	name = "hello"
 	type = "Executable"
 	instructions {
 		... modules.toList().map((file) ->
 			new Instruction {
 				inputs { file }
-				output = file + ".pcm"
-				command = compile_prefix + " --prebuilt-module-path=. --precompile " + file + " -o " + file + ".pcm "
+				result = precompiledModulePath.apply(file)
+				command = compile_prefix + " --prebuilt-module-path=. --precompile " + file + " -o " + result
 			}
 		).toListing();
 
 		... modules.toList().map((file) ->
 			new Instruction {
-				inputs { file + ".pcm" }
-				output = file + ".o"
+				inputs { precompiledModulePath.apply(file) }
+				result = compiledModulePath.apply(file)
 				command = compile_prefix + " --prebuilt-module-path=. -c " + file + ".pcm -o " + file + ".o "
 			}
 		).toListing();
 
 		new Instruction {
 			inputs {
-				... modules.toList().map((file) -> file + ".o").toListing()
+				... modules.toList().map((file) -> compiledModulePath.apply(precompiledModulePath.apply(file))).toListing()
 			}
-			output = name
-			command = compile_prefix + " " + catlst(modules.toList().map((file) -> file + ".o").toListing()) + " -o " + name
+			result = name
+			command = compile_prefix + " " + StringUtil.join(inputs) + " -o " + name
 		}
 	}
 }

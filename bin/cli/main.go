@@ -9,7 +9,7 @@ import (
 
 type Instruction struct {
 	Inputs 	[]string 			`pkl:"inputs"`
-	Output 	string 	 			`pkl:"output"`
+	Result 	string 	 			`pkl:"result"`
 	Command string 				`pkl:"command"`
 }
 

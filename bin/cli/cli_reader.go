@@ -1,16 +1,38 @@
 package main
 
 import (
-	"bytes"
+	"encoding/base64"
 	"errors"
 	"net/url"
 	"os/exec"
-//	"fmt"
+	"fmt"
+	"runtime"
 )
 
-// cliCommandReader executes shell commands based on URLs with the cli:// scheme.
-type cliCommandReader struct{
+// executeCommand executes a shell command, automatically adjusting for the
+// operating system. On Unix-like systems, it uses `bash -c`, and on Windows,
+// it uses `cmd /C`.
+func executeCommand(command string) (string, error) {
+	var cmd *exec.Cmd
 
+	if runtime.GOOS == "windows" {
+		// Windows: Use cmd /C
+		cmd = exec.Command("cmd", "/C", command)
+	} else {
+		// Unix-like: Use bash -c
+		cmd = exec.Command("bash", "-c", command)
+	}
+
+	output, err := cmd.CombinedOutput()
+	return string(output), err
+}
+
+
+
+///--------
+
+// cliCommandReader executes shell commands based on URLs with the cli:// scheme.
+type cliCommandReader struct {
 }
 
 // Scheme returns the scheme this reader handles.
@@ -36,23 +58,15 @@ func (c *cliCommandReader) ListElements(url url.URL) ([]PathElement, error) {
 // Read executes the shell command specified in the URL and returns its output.
 func (c *cliCommandReader) Read(url url.URL) ([]byte, error) {
 
+	fmt.Println("Running cmd...");
 	cmdStr := url.String()[6:]
-	// Extracting the command from the URL path
-	//commandWithArgs := url.Path // Removing the leading slash
-	//if commandWithArgs == "" {
-	//	return nil, errors.New("no command provided")
-	//}
-
-	// Splitting command and arguments
-	//parts := bytes.SplitN([]byte(commandWithArgs), []byte(" "), 2)
-	cmd := exec.Command(cmdStr)
-
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
+	decodedBytes, err := base64.StdEncoding.DecodeString(cmdStr)
 	if err != nil {
 		return nil, err
 	}
-
-	return out.Bytes(), nil
+	output, err := executeCommand(string(decodedBytes))
+    if err != nil {
+        return nil, err
+    }
+	return []byte(output), nil
 }
