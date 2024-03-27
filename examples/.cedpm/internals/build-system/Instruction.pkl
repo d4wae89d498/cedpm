@@ -1,5 +1,0 @@
-module Instruction
-
-inputs: Listing<String>
-result: String
-command: String

@@ -1,12 +1,2 @@
 open module Executable
-
-
-class compilation_order {
-	standard: String
-	debug: Boolean
-	customFlags: String
-}
-
-name: String
-instructions: Mapping<String, Mapping<String, compilation_order>>
-
+extends "./Artifact.pkl"

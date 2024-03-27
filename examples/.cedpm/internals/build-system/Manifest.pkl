@@ -1,8 +1,8 @@
 module Manifest
 
-import "./Target.pkl" as Target
+import "./Artifact.pkl"
 
 
-targets: Listing<Target>?
+artifacts: Listing<Artifact>?
 
 

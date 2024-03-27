@@ -7,20 +7,20 @@ import (
 )
 
 
-type Instruction struct {
-	Inputs 	[]string 			`pkl:"inputs"`
-	Result 	string 	 			`pkl:"result"`
-	Command string 				`pkl:"command"`
+type Target struct {
+	Dependencies 	[]string 			`pkl:"dependencies"`
+	Name 			string 	 			`pkl:"name"`
+	Command 		string 				`pkl:"command"`
 }
 
-type Target struct {
-	Name string					`pkl:"name"`
-	Type string					`pkl:"type"`
-	Instructions []Instruction	`pkl:"instructions"`
+type Artifact struct {
+//	Name string					`pkl:"name"`
+//	Type string					`pkl:"type"`
+Targets			[]Target				`pkl:"targets"`
 }
 
 type MyConfig struct {
-	Targets []Target 			`pkl:"targets"`
+	Artifacts 		[]Artifact 			`pkl:"artifacts"`
 }
 
 

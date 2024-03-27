@@ -1,21 +1,13 @@
-amends "@build-system/Manifest.pkl"
-import "@c++/Executable.pkl" as CppExecutable
-import "@utils/os.pkl" as OS
+amends "@build-system/manifest.pkl"
+import "@c++/Builder.pkl" as Cpp
 
-targets {
-	new CppExecutable {
+artifacts {
+	new Cpp.Executable {
 		name = "./MathOps"
 		standard = "c++23"
 		debug = true
 		modules {
-			... CppExecutable.findModules(".", "*.cppm")
+			... Cpp.findModules(".", "*.cppm")
 		}
-		compiledModulePath = (modulePath) ->
-			outputDir + OS.fileName(modulePath) + ".o"
-		sources {
-
-		}
-		libraries {
-		}
-	}.target()
+	}
 }
