@@ -1,3 +1,0 @@
-[submodule "bin/pkl-go"]
-	path = bin/pkl-go
-	url = https://github.com/apple/pkl-go.git
