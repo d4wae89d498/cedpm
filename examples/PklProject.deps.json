@@ -53,15 +53,15 @@
       "uri": "projectpackage://not/package++@1.0.1@1.0.1",
       "path": ".cedpm/internals/c++"
     },
-    "package://not/package@1.0.1@1": {
-      "type": "local",
-      "uri": "projectpackage://not/package@1.0.1@1.0.1",
-      "path": ".cedpm/internals/c"
-    },
     "package://not/package--@1.0.1@1": {
       "type": "local",
       "uri": "projectpackage://not/package--@1.0.1@1.0.1",
       "path": ".cedpm/internals/utils"
+    },
+    "package://not/package@1.0.1@1": {
+      "type": "local",
+      "uri": "projectpackage://not/package@1.0.1@1.0.1",
+      "path": ".cedpm/internals/c"
     }
   }
 }

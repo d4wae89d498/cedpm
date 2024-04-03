@@ -1,32 +1,14 @@
 #!/bin/bash
 
-filename="Project.pkl"
-project_root=$(pwd)
-found=0
+cedpm_root=$(dirname "$(realpath "$0")")
 
-while [ "$project_root" != "/" ]; do
-    if [ -f "$project_root/$filename" ]; then
-        echo "Found '$filename' in '$project_root'"
-        found=1
-        break
-    fi
-    project_root=$(dirname "$project_root")
-done
+source ${cedpm_root}/common/get_project_root.sh
 
-if [ $found -ne 1 ]; then
-    echo "No '$filename' was not found in any parent directory. Run a cedpm init first."
-	exit 1;
-fi
 
-if test -f "$project_root/PklProject" && ! test -L "$project_root/PklProject"; then
-	echo "Error: a non-symlink PklProject is present before Project.pkl."
-	exit 1;
-fi;
+#rm -f $project_root/PklProject $project_root/PklProject.deps.json
 
-rm -f $project_root/PklProject $project_root/PklProject.deps.json
-
-ln -s $project_root/Project.pkl $project_root/PklProject
-ln -s $project_root/Project.deps.json $project_root/PklProject.deps.json
+#ln -s $project_root/Project.pkl $project_root/PklProject
+#ln -s $project_root/Project.deps.json $project_root/PklProject.deps.json
 
 #if [ ! -f $project_root/.cedpm/PklProject.deps.json ]; then
 #	echo "Error. Run npm install first."
@@ -35,8 +17,21 @@ ln -s $project_root/Project.deps.json $project_root/PklProject.deps.json
 
 #source $project_root/.cedpm/env.sh
 
-cat $1 | preprocess > .tmp
-shift;
-pkl eval .tmp $@
+#cat $1 | preprocess > .tmp
+#shift;
+#cd pkl eval .tmp $@
+if test $project_root != "null"; then
+	source $project_root/.cedpm/env/*.sh
 
-rm -f $project_root/PklProject $project_root/PklProject.deps.json
+	content=$(${cedpm_root}/pkls/pkls $1 $project_root)
+
+	if ! echo "$content" | ${cedpm_root}/jmk/jmk; then
+		echo "JSON parse error in: $content"
+	fi;
+else
+	${cedpm_root}/pkls/pkls $1 | ${cedpm_root}/jmk/jmk
+
+#	${cedpm_root}/pkls/pkls $1
+fi
+
+#rm -f $project_root/PklProject $project_root/PklProject.deps.json

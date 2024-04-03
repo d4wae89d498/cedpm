@@ -12,4 +12,5 @@ class Library extends Target
 }
 
 function findModules(dir: String, pattern: String): Listing<String> =
+	//OS.cli("ls").split("\n").toListing()
 	OS.cli("cppmodsort $(find "+ dir +" -type f -name \""+ pattern +"\")").split("\n").toListing()

@@ -34,7 +34,7 @@ targets {
 			new Target {
 				dependencies { file }
 				name = precompiledModulePath.apply(file)
-				command = compile_prefix + " --prebuilt-module-path=. --precompile " + file + " -o " + name
+				command = compile_prefix + " -fprebuilt-module-path=. --precompile " + file + " -o " + name
 			}
 		).toListing();
 
@@ -42,7 +42,7 @@ targets {
 			new Target {
 				dependencies { precompiledModulePath.apply(file) }
 				name = compiledModulePath.apply(file)
-				command = compile_prefix + " --prebuilt-module-path=. -c " + file + ".pcm -o " + file + ".o "
+				command = compile_prefix + " -fprebuilt-module-path=. -c " + file + ".pcm -o " + file + ".o "
 			}
 		).toListing();
 
