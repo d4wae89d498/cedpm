@@ -1,0 +1,11 @@
+PklProject :
+- implement path, path will feed the cedpm <name> and cedpm <path> <to> <cmd> according path/to/cmd
+- implement before after and on commands
+
+
+C Build System :
+- implement automatic library finding
+
+C++ Build System :
+- implement cppm share
+- implement header share

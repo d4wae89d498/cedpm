@@ -1,19 +1,9 @@
 module pkl.Project
-extends "./AppleProject.pkl" //as Project
+extends "./AppleProject.pkl"
 
-//extends "pkl:Project"
+typealias cedpm_events = Mapping<String, Listing<String>>
 
-//host_os_name: String
-
-//host_isa: String
-
-//host_endianess: "big"|"little"
-
-//class default_compiler {
-//	path: 	String
-//	flags: 	String
-//}
-
-//compilers: Mapping<String, default_compiler>
-
-//versions: Listing<String>
+paths: Listing<String>?
+before: cedpm_events?
+after: cedpm_events?
+on: cedpm_events?

@@ -3,12 +3,28 @@
 
 amends ".cedpm/1.0/Project.pkl"
 
-
 package {
 	name = "cs"
 	version = "1.0.1"
 	baseUri = "package://not/package@1.0.1"
 	packageZipUrl = "https://not"
+}
+
+paths {
+	"./"
+}
+
+before {
+	["install"] {
+		"./analyse_machine.sh"
+		"cedpm build"
+	}
+	["uninstall"] {
+		"cedpm clean"
+	}
+	["eval"] {
+		"source env/*.sh"
+	}
 }
 
 dependencies {
@@ -26,5 +42,3 @@ dependencies {
 	["build-system"] = import(".cedpm/internals/build-system/Project.pkl")
 	["utils"] = import(".cedpm/internals/utils/Project.pkl")
 }
-
-

@@ -1,4 +1,4 @@
-package main
+package evaluator
 
 import (
 	"context"
@@ -8,8 +8,9 @@ import (
 	"errors"
 )
 
-func main() {
+func EvaluateFile(filePath string, projectDir string) {
 
+	/*
 	// Getting cli args
 	filePath, projectDir := "", ""
 	if len(os.Args) == 2 {
@@ -19,7 +20,7 @@ func main() {
 	} else {
 		fmt.Printf("Usage: %s <FilePath> [ProjectDir]\n", os.Args[0])
 		os.Exit(1)
-	}
+	}*/
 
 	// Default PKL options
 	opts := func(opts *pkl.EvaluatorOptions) {

@@ -25,11 +25,14 @@ if test $project_root != "null"; then
 
 	content=$(${cedpm_root}/pkls/pkls $1 $project_root)
 
+	echo $content;
+	exit ;
+
 	if ! echo "$content" | ${cedpm_root}/jmk/jmk; then
 		echo "JSON parse error in: $content"
 	fi;
 else
-	${cedpm_root}/pkls/pkls $1 | ${cedpm_root}/jmk/jmk
+	${cedpm_root}/pkls/pkls $1 #| ${cedpm_root}/jmk/jmk
 
 #	${cedpm_root}/pkls/pkls $1
 fi
