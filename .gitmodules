@@ -1,0 +1,3 @@
+[submodule "src/cli/pkl-go"]
+	path = src/cli/pkl-go
+	url = git@github.com:d4wae89d498/pkl-go.git

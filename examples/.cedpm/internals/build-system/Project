@@ -1,5 +1,5 @@
 
-amends ".cedpm/1.0/Project.pkl"
+amends ".cedpm/1.0/Project"
 
 package {
   name = "build-system"

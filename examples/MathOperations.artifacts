@@ -9,5 +9,9 @@ artifacts {
 		modules {
 			... Cpp.findModules(".", "*.cppm")
 		}
+//		TODO: add that:
+//		dependencies {
+//			"lib/test.pkl"
+//		}
 	}
 }

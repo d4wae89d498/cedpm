@@ -5,9 +5,9 @@ if [ $3 ]; then
 	exit ;
 fi;
 
-if ! test -f "$(pwd)/Project.pkl";
+if ! test -f "$(pwd)/Project";
 then
-	echo "Error: no Project.pkl file found. Please run cedpm init before."
+	echo "Error: no Project file found. Please run cedpm init before."
 	exit 1;
 fi;
 
@@ -18,7 +18,7 @@ fi;
 
 mkdir -p $(pwd)/.cedpm
 rm -f $(pwd)/PklProject
-ln -s  $(pwd)/Project.pkl $(pwd)/PklProject
+ln -s  $(pwd)/Project $(pwd)/PklProject
 
 export ENV_DIR=$(pwd)/.cedpm/env/
 
@@ -69,7 +69,7 @@ jq -c '.resolvedDependencies[] | {type, uri, path}' "$json_file" | while read -r
   elif [ "$type" = "local" ]; then
   	path=$(echo "$dep"  | tr '\n' ' ' | jq -r '.path')
 #	echo "[[$path]]] [[$dep]]"
-	name=$(pkl eval "$path/Project.pkl" --format json | tr '\n' ' ' | jq -r '.package.name')
+	name=$(pkl eval "$path/Project" --format json | tr '\n' ' ' | jq -r '.package.name')
 	echo "Found local dep $name"
 #  	target_dir=".cedpm/packages/$name"
     if [ -n "$path" ]; then
@@ -95,7 +95,7 @@ fi;
 
 package_name=$2
 echo "Installing package $2 ..."
-CONFIG_FILE="Project.pkl"
+CONFIG_FILE="Project"
 cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
 NEW_DEPENDENCY='  ["new_dependency"] {\n    uri = "package://pkg.pkl-lang.org/new_dependency@1.0.0"\n  }'
 awk -v new_dep="$NEW_DEPENDENCY" '

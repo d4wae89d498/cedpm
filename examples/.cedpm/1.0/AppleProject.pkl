@@ -92,8 +92,9 @@ package: Package?
 tests: Listing<String>(isDistinct)
 
 /// Tells if the project is a file-based module named `PklProject`.
+/*TODO: also add support for*/
 local isLocalPklProject = (it: Project) ->
-  it.projectFileUri.startsWith("file:") && it.projectFileUri.endsWith("/Project.pkl")
+  it.projectFileUri.startsWith("file:") && it.projectFileUri.endsWith("/Project")
 
 /// A local dependency is another [Project] that is local to the file system.
 ///

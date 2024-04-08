@@ -6,8 +6,11 @@ import (
 	"path/filepath"
 )
 
-const ProjectFileName = "PklProject"
+// TODO: also support "'PklProject' files?"
+const ProjectFileName = "Project"
 
+
+// TODO : reflect file name according func, aadd a - instead of _
 func FindProjectDir(startDir string) (string, error) {
 	pklProjectDir := filepath.Join(startDir, ProjectFileName)
 	if _, err := os.Stat(pklProjectDir); err == nil {

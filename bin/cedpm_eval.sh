@@ -7,7 +7,7 @@ source ${cedpm_root}/common/get_project_root.sh
 
 #rm -f $project_root/PklProject $project_root/PklProject.deps.json
 
-#ln -s $project_root/Project.pkl $project_root/PklProject
+#ln -s $project_root/Project $project_root/PklProject
 #ln -s $project_root/Project.deps.json $project_root/PklProject.deps.json
 
 #if [ ! -f $project_root/.cedpm/PklProject.deps.json ]; then

@@ -2,26 +2,82 @@ package evaluator
 
 import (
 	"context"
-	"fmt"
+//	"fmt"
 	"os"
-	"github.com/apple/pkl-go/pkl"
+	"cedpm.org/pkl-go/pkl"
 	"errors"
 )
 
-func EvaluateFile(filePath string, projectDir string) {
+// cliCommandReader is assumed to be defined elsewhere
 
-	/*
-	// Getting cli args
-	filePath, projectDir := "", ""
-	if len(os.Args) == 2 {
-		filePath = os.Args[1]
-	} else if len(os.Args) == 3 {
-		filePath, projectDir = os.Args[1], os.Args[2]
+func EvaluateFile(filePath string, projectDir string) (string, error) {
+	opts := func(opts *pkl.EvaluatorOptions) {
+		pkl.PreconfiguredOptions(opts)
+		reader := &cliCommandReader{}
+		pkl.WithResourceReader(reader)(opts)
+		opts.OutputFormat = "json"
+	}
+
+	manager := pkl.NewEvaluatorManager()
+	var evaluator pkl.Evaluator
+	var err error
+	if projectDir != "" {
+		projectEvaluator, err := manager.NewEvaluator(context.Background(), opts)
+		if err != nil {
+			return "", err
+		}
+
+		projectFileName := projectDir + "/Project"
+		if _, err := os.Stat(projectFileName); os.IsNotExist(err) {
+			projectFileName = projectDir + "/PklProject"
+		}
+		if _, err := os.Stat(projectFileName); os.IsNotExist(err) {
+			return "", errors.New("No 'Project' or 'PklProject' found")
+		}
+
+		pkl.RegisterMapping("pkl.AppleProject#RemoteDependency", pkl.ProjectRemoteDependency{})
+		project, err := pkl.LoadProjectFromEvaluator(context.Background(), projectEvaluator, projectFileName)
+		if err != nil {
+			return "", err
+		}
+
+		withProject := func(project *pkl.Project) func(opts *pkl.EvaluatorOptions) {
+			return func(opts *pkl.EvaluatorOptions) {
+				pkl.WithProjectEvaluatorSettings(project)(opts)
+				opts.ProjectDir = projectDir
+				opts.DeclaredProjectDepenedencies = project.Dependencies()
+			}
+		}
+		newOpts := []func(opts *pkl.EvaluatorOptions){withProject(project), opts}
+		evaluator, err = manager.NewEvaluator(context.Background(), newOpts...)
+		if err != nil {
+			return "", err
+		}
 	} else {
-		fmt.Printf("Usage: %s <FilePath> [ProjectDir]\n", os.Args[0])
-		os.Exit(1)
-	}*/
+		evaluator, err = pkl.NewEvaluator(context.Background(), opts)
+		if err != nil {
+			return "", err
+		}
+	}
+	defer evaluator.Close()
 
+	return evaluator.EvaluateOutputText(context.Background(), pkl.FileSource(filePath))
+//	if err != nil {
+//		return "", err
+//	}
+
+/*
+	jsonData, err := json.Marshal(cfg)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonData), nil*/
+}
+
+
+/*
+func EvaluateFile(filePath string, projectDir string) {
 	// Default PKL options
 	opts := func(opts *pkl.EvaluatorOptions) {
 		pkl.PreconfiguredOptions(opts)
@@ -42,14 +98,14 @@ func EvaluateFile(filePath string, projectDir string) {
 			panic(err)
 		}
 
-		var projectFileName string = projectDir + "/Project.pkl";
+		var projectFileName string = projectDir + "/Project";
 		_, err = os.Stat(projectFileName)
 		if err != nil && os.IsNotExist(err) {
 			projectFileName = projectDir + "/PklProject"
 		}
 		_, err = os.Stat(projectFileName)
 		if err != nil && os.IsNotExist(err) {
-			panic(errors.New("No 'Project.pkl' or 'PklProject' found."))
+			panic(errors.New("No 'Project' or 'PklProject' found."))
 		}
 		//fmt.Println("Using projectFile: %s", projectFileName)
 
@@ -92,7 +148,6 @@ func EvaluateFile(filePath string, projectDir string) {
 	}
 	fmt.Printf("%s\n", cfg)
 	//fmt.Printf("%+v\n", cfg)
-/*
 	// Conversion de l'instance de Person en JSON
 	jsonData, err := json.Marshal(cfg)
 	if err != nil {
@@ -102,5 +157,7 @@ func EvaluateFile(filePath string, projectDir string) {
 	// Conversion des données JSON en chaîne (pour l'affichage)
 	jsonString := string(jsonData)
 
-	fmt.Println(jsonString)*/
+	fmt.Println(jsonString)
 }
+
+*/

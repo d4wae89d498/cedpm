@@ -6,12 +6,12 @@ import (
 	"flag"
 	"cedpm.org/project_manifest"
 	"cedpm.org/evaluator"
-	"cedpm.org/verbrose"
+	"cedpm.org/internal"
 	"path"
 )
 
 const version = "1.0.0"
-const debug = true
+const debugEnabled = true
 
 func showUsage() {
 	fmt.Printf(`Usage: %s [command] [options]
@@ -27,7 +27,7 @@ Commands:
 
 func main() {
 
-	verbrose.Enabled = debug
+	internal.DebugEnabled = debugEnabled
 
 	// Init
 
@@ -36,7 +36,7 @@ func main() {
 		fmt.Println("Error getting current directory:", err)
 		return
 	}
-	verbrose.Println("cedpm in ", currentDir)
+	internal.Debug("cedpm in %s", currentDir)
 
 	// Basic arguments
 
@@ -70,15 +70,36 @@ func main() {
 		fmt.Println("Unable to use project file:", err)
 		return
 	}
-	verbrose.Println("cedpm project file :", projectDir)
-	evaluator.EvaluateFile(path.Join(projectDir, project_manifest.ProjectFileName), projectDir)
+	projectFile := path.Join(projectDir, project_manifest.ProjectFileName)
+	internal.Debug("cedpm project file : %s", projectFile)
+	evaluator.EvaluateFile(projectFile, projectDir)
 
 	// Complex arguments that use the project file
+
+	if os.Args[1] == "eval" {
+		if len(os.Args) != 3 {
+			fmt.Println("Usage: %s eval <filename>", os.Args[0])
+			return
+		}
+		internal.Debug("evaluating '%s'\n", os.Args[2])
+		evaluator.ExecuteCommand("rm PklProject")
+		evaluator.ExecuteCommand("ln -s .dependencies.json PklProject.deps.json")
+		defer evaluator.ExecuteCommand("rm PklProject.deps.json");
+		json, err := evaluator.EvaluateFile(os.Args[2], projectDir)
+		if err != nil {
+			fmt.Printf("Unable to evaluate file %s: ", os.Args[2], err)
+			return
+		}
+		fmt.Println(json)
+		return
+	}
 
 	command := os.Args[1]
 	switch command {
 	case "install", "search", "uninstall", "eval":	// its a builtin
 		fmt.Printf("Executing '%s' command...\n", command)
+
+
 		os.Exit(0)
 	default:
 	}

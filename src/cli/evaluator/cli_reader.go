@@ -7,13 +7,13 @@ import (
 	"os/exec"
 	//"fmt"
 	"runtime"
-	"github.com/apple/pkl-go/pkl"
+	"cedpm.org/pkl-go/pkl"
 )
 
 // executeCommand executes a shell command, automatically adjusting for the
 // operating system. On Unix-like systems, it uses `bash -c`, and on Windows,
 // it uses `cmd /C`.
-func executeCommand(command string) (string, error) {
+func ExecuteCommand(command string) (string, error) {
 	var cmd *exec.Cmd
 
 	if runtime.GOOS == "windows" {
@@ -63,7 +63,7 @@ func (c *cliCommandReader) Read(url url.URL) ([]byte, error) {
 		panic(err)
 		return nil, err
 	}
-	output, err := executeCommand(string(decodedBytes))
+	output, err := ExecuteCommand(string(decodedBytes))
     if err != nil {
 		panic(err)
         return nil, err

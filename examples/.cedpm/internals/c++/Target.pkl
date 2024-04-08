@@ -8,9 +8,9 @@ hidden name: String;
 local modName = name;
 hidden type: "Executable" | "Library";
 hidden debug: Boolean = false;
-hidden compiler: String = read("env:CXX")
-hidden standard: String = read("env:CXXSTANDARDS").split(" ").last;
-hidden flags: String = read("env:CXXFLAGS")
+hidden compiler: String = "clang++"//read("env:CXX")
+hidden standard: String = ""//read("env:CXXSTANDARDS").split(" ").last;
+hidden flags: String = ""//read("env:CXXFLAGS")
 hidden modules: Listing<String>
 hidden libraries: Listing<String>
 hidden sources: Listing<String>

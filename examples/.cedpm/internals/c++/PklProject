@@ -1,5 +1,5 @@
 
-amends ".cedpm/1.0/Project.pkl"
+amends ".cedpm/1.0/Project"
 
 package {
   name = "c++"
@@ -11,7 +11,7 @@ package {
 tests {}
 
 dependencies {
-	["build-system"] = import("../build-system/Project.pkl")
-	["utils"] = import("../utils/Project.pkl")
+	["build-system"] = import("../build-system/Project")
+	["utils"] = import("../utils/Project")
 }
 

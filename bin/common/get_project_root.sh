@@ -4,7 +4,7 @@ project_root=$(pwd)
 found=0
 
 while [ "$project_root" != "/" ]; do
-    if test -f "$project_root/Project.pkl" || test -f "$project_root/PklProject"; then
+    if test -f "$project_root/Project" || test -f "$project_root/PklProject"; then
         echo "Found project in '$project_root'"
         found=1
         break
