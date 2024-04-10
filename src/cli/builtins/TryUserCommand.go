@@ -15,6 +15,9 @@ var (
 	ErrUnknownCommand = errors.New("unknown command error")
 )
 
+
+
+// Todo: return command and arguments
 func TryUsingCommands(commandList project_manifest.CommandList, input []string, startIndex int) error {
 	if startIndex >= len(input) {
 		return ErrNotFound
@@ -38,6 +41,7 @@ func TryUsingCommands(commandList project_manifest.CommandList, input []string, 
 	return TryUsingCommands(commandList, input, startIndex+1)
 }
 
+// Todo: return command and arguments
 func TryUsingPaths(commandList project_manifest.CommandList, input []string) error {
 	if len(input) == 0 {
 		return ErrNotFound
@@ -54,6 +58,9 @@ func TryUsingPaths(commandList project_manifest.CommandList, input []string) err
 	return TryUsingPaths(commandList, input[:len(input)-1])
 }
 
+// Todo: use returned command and arguments to execute Before, After, and On
+// Todo: determine if we keep events for a childs, exemple: we have 'test' as command key, and we run 'test foo'
+//		would 'test' s events apply ?
 func TryUserCommand(commandList project_manifest.CommandList, input []string) error {
 	fmt.Println("trying with commands...")
 	if err := TryUsingCommands(commandList, input, 0); err != nil {
