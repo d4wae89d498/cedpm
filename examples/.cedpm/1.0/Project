@@ -7,3 +7,4 @@ paths: Listing<String>?
 before: cedpm_events?
 after: cedpm_events?
 on: cedpm_events?
+commands: cedpm_events?

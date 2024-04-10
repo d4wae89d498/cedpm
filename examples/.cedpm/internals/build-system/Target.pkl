@@ -1,5 +1,0 @@
-module Target
-
-dependencies: Listing<String>
-name: String
-command: String

@@ -21,7 +21,23 @@ paths {
 	"./"
 }
 
-after {
+// paths vs on ? let both ?
+
+// shift arguments ?
+
+commands {
+	["eval"] {
+
+	}
+}
+
+on {
+	["eval"] {
+
+	}
+}
+
+before {
 	["install"] {
 		"./analyse_machine.sh"
 		"cedpm build"
@@ -44,8 +60,8 @@ dependencies {
 	["appEnvCluster"] {
 		uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib.appEnvCluster@1.0.0"
 	}
-	["c"] = import(".cedpm/internals/c/Project")
-	["c++"] = import(".cedpm/internals/c++/PklProject")
-	["build-system"] = import(".cedpm/internals/build-system/Project")
-	["utils"] = import(".cedpm/internals/utils/Project")
+	["c"] = import("../src/packages/c/Project")
+	["c++"] = import("../src/packages/c++/PklProject")
+	["build-system"] = import("../src/packages/build-system/Project")
+	["utils"] = import("../src/packages/utils/Project")
 }

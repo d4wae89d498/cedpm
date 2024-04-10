@@ -1,8 +1,0 @@
-module Manifest
-
-import "./Artifact.pkl"
-
-
-artifacts: Listing<Artifact>?
-
-

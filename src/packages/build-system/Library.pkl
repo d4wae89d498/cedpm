@@ -1,0 +1,2 @@
+open module Library
+extends "./Artifact.pkl"

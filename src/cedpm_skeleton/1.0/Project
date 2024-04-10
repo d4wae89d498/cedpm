@@ -1,0 +1,10 @@
+module pkl.Project
+extends "./AppleProject.pkl"
+
+typealias cedpm_events = Mapping<String, Listing<String>>
+
+paths: Listing<String>?
+before: cedpm_events?
+after: cedpm_events?
+on: cedpm_events?
+commands: cedpm_events?

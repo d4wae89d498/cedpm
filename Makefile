@@ -1,5 +1,5 @@
 all:
-	cd src/cli && go build -o ../../bin/cedpm
+	cd src/cli && go build -o cedpm
 
 test:
-	cd examples && cedpm d d
+	export PATH=$$PATH:$$(pwd)/src/cli && cd examples && cedpm d d

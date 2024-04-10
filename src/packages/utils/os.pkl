@@ -1,0 +1,7 @@
+//import "./string.pkl" as StringUtil
+
+function cli(command: String): String =
+	read("cli://" + command.base64).text
+
+function fileName(path: String): String =
+	path.split("/").last
