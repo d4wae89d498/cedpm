@@ -5,8 +5,10 @@ import (
 	"os"
 	"flag"
 	"cedpm.org/project_manifest"
+	"cedpm.org/project_skeleton"
 	"cedpm.org/evaluator"
 	"cedpm.org/internal"
+	"cedpm.org/builtins"
 	"path"
 )
 
@@ -71,11 +73,8 @@ func main() {
 		return
 	}
 
-	// Init cedpm
-
-	InitCedpm(projectDir);
-
-	//return
+	// Init .cedpm directory
+	project_skeleton.Init(projectDir);
 
 	projectFile := path.Join(projectDir, project_manifest.ProjectFileName)
 	internal.Debug("cedpm project file : %s", projectFile)
@@ -83,54 +82,34 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error reading Project Manifest\n", err)
 	}
-	ParseProjectManifest(jsonData)
-	ParseProjectDeps(projectDir)
+	_ = jsonData
+
+	//ParseProjectManifest(jsonData)
+	//ParseProjectDeps(projectDir)
 
 	// Complex arguments that use the project file
 
 	if os.Args[1] == "install" {
-		if len(os.Args) != 2 {
-			// TODO : add support for package name
-			fmt.Printf("Usage: %s install\n", os.Args[0])
+		if len(os.Args) == 2 {
+			builtins.Install(projectDir)
+
+			internal.Debug("Project dependancies installed successfully.")
 			return
 		}
+		// TODO : add support for package name
 
-		// use deps
-		// TODO : use a CD before
-		evaluator.ExecuteCommand("rm PklProject")
-		evaluator.ExecuteCommand("rm PklProject.deps.json")
-		evaluator.ExecuteCommand("rm .dependencies.json")
-
-		evaluator.ExecuteCommand("ln -s Project PklProject")
-
-		defer evaluator.ExecuteCommand("rm PklProject")
-		defer evaluator.ExecuteCommand("mv PklProject.deps.json .dependencies.json")
-
-		evaluator.ExecuteCommand("pkl project resolve")
-		fmt.Printf("Done.")
-
+		fmt.Printf("Usage: %s install\n", os.Args[0])
 		return
 	}
+	return
 
 	if os.Args[1] == "eval" {
 		if len(os.Args) != 3 {
 			fmt.Printf("Usage: %s eval <filename>", os.Args[0])
 			return
 		}
-		internal.Debug("evaluating '%s'\n", os.Args[2])
 
-		// use deps
-		// TODO : use a CD before
-		evaluator.ExecuteCommand("rm PklProject")
-		evaluator.ExecuteCommand("ln -s .dependencies.json PklProject.deps.json")
-		defer evaluator.ExecuteCommand("rm PklProject.deps.json");
-
-		json, err := evaluator.EvaluateFile(os.Args[2], projectDir)
-		if err != nil {
-			fmt.Printf("Unable to evaluate file %s: ", os.Args[2], err)
-			return
-		}
-		fmt.Println(json)
+		builtins.EvaluateFile(os.Args[2], projectDir);
 		return
 	}
 

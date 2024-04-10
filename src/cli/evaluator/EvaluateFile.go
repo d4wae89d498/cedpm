@@ -28,11 +28,8 @@ func EvaluateFile(filePath string, projectDir string) (string, error) {
 		}
 
 		projectFileName := projectDir + "/Project"
-		if _, err := os.Stat(projectFileName); os.IsNotExist(err) {
-			projectFileName = projectDir + "/PklProject"
-		}
-		if _, err := os.Stat(projectFileName); os.IsNotExist(err) {
-			return "", errors.New("No 'Project' or 'PklProject' found")
+		if _, err := os.Stat(projectFileName); err != nil {
+			return "", errors.New("No 'Project' found")
 		}
 
 		pkl.RegisterMapping("pkl.AppleProject#RemoteDependency", pkl.ProjectRemoteDependency{})

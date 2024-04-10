@@ -13,6 +13,7 @@ import (
 	"encoding/hex"
 	"path/filepath"
 	"strings"
+_	"cedpm.org/internal"
 )
 
 /*\
@@ -259,15 +260,6 @@ func copyDir(src string, dst string) error {
 
 //////////////////////////////////////////////////////////////
 
-func InitCedpm(projectDir string) error {
-	err := copyDir("../src/cedpm_skeleton", projectDir + "/.cedpm/")
-	if err != nil {
-		fmt.Println("Error copying directory:", err)
-		return err
-	}
-	fmt.Println("Directory copied successfully.")
-	return nil
-}
 
 func ParseProjectDeps(projectDir string) error {
 	fmt.Printf("Reading read deps json file !\n")
