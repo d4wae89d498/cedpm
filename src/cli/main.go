@@ -32,6 +32,8 @@ func main() {
 
 	internal.DebugEnabled = debugEnabled
 
+	// Todo: check for PKL presence, download it if not exists locally.
+
 	// Init
 
 	currentDir, err := os.Getwd()
@@ -95,8 +97,20 @@ func main() {
 	// maybe: hardcode only install no arg, and let command system for the rest
 
 	// read 'Project' file, set up user hooks
-	var cmdLst project_manifest.CommandList
+	var cmdLst project_manifest.CommandList = project_manifest.CommandList{
+		Paths:   []string{},
+		Commands: make(map[string]project_manifest.Command),
+	}
 
+	cmdLst.Commands["install"] = project_manifest.Command{
+		Before:   []string{},
+		After:    []string{},
+		On:       []string{},
+		Actions:  []string{},
+	}
+
+
+	// user command should be added after others, but at the top of the lists ??
 	err = project_manifest.ParseProjectAddons(jsonData, &cmdLst)
 	if err != nil {
 		panic(err)
@@ -126,10 +140,14 @@ func main() {
 		panic(err)
 	}
 
-	err = project_manifest.ParseDependenciesAddons(deps, &cmdLst);
+	err = project_manifest.ParseDependenciesAddons(projectDir, deps, &cmdLst);
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println(cmdLst)
+
+	return
 
 	err = builtins.TryUserCommand(cmdLst, os.Args)
 	if err != nil {

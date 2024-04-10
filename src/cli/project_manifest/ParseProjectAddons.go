@@ -2,7 +2,7 @@ package project_manifest
 
 import (
 	"encoding/json"
-	"fmt"
+_	"fmt"
 //	"io/ioutil"
 //	"os"
 _	"cedpm.org/internal"
@@ -35,31 +35,37 @@ type projectFileAddons struct {
 
 //////////////////////////////////////////////////////////////
 
-
+// TODO : fix that to incrementally add even if commnad was not set before
 func ParseProjectAddons(jsonData string, commandList *CommandList) error {
 	var addons projectFileAddons
 
 	if err := json.Unmarshal([]byte(jsonData), &addons); err != nil {
-		//("Error parsing JSON:", err)
 		return err
 	}
 
-	fmt.Println("Project File addons:", addons)
+	// Append paths
+	commandList.Paths = append(commandList.Paths, addons.Paths...)
 
-
-	commandList.Paths = append(
-		commandList.Paths,
-		addons.Paths...
-	)
-
-	for key, value := range addons.Commands {
-		_, exists := commandList.Commands[key]
-		if exists {
-			return errors.New("Err")
+	// Process commands
+	for cmdKey, actions := range addons.Commands {
+		if _, exists := commandList.Commands[cmdKey]; exists {
+			return errors.New("duplicate command key found")
 		}
-		_ = value
-		_ = key
-    }
+
+		// Construct new Command struct with the addon data
+		newCommand := Command{
+			Before:  addons.Before[cmdKey],
+			After:   addons.After[cmdKey],
+			On:      addons.On[cmdKey],
+			Actions: actions,
+		}
+
+		// Add the new Command to the CommandList's Commands map
+		if commandList.Commands == nil {
+			commandList.Commands = make(map[string]Command)
+		}
+		commandList.Commands[cmdKey] = newCommand
+	}
 
 
 	return nil

@@ -9,6 +9,9 @@ artifacts {
 		modules {
 			... Cpp.findModules(".", "*.cppm")
 		}
+// 		How to deal with libraries links ?
+//			Link all by default and let ability to link manually ?
+//			Same with prebuilt-modules-paths ?
 //		TODO: add that:
 //		dependencies {
 //			"lib/test.pkl"
