@@ -6,3 +6,5 @@ a.out
 *.a
 *.tmp
 *.swp
+.dependencies.json
+examples/.cedpm
