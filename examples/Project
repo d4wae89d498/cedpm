@@ -1,9 +1,7 @@
 
-//import "pkl:Project" as Project
 amends ".cedpm/1.0/Project"
 
 
-// TODO: rename this file in Package ? Package.pkl ? along with Package.json ?
 package {
 	name = "cs"
 	version = "1.0.1"
@@ -11,42 +9,28 @@ package {
 	packageZipUrl = "https://not"
 }
 
-// add artifacts here ? or let both possibilitites ? How to resolve per-target priorities ?
-
-//artifacts {
-//	import ("./MathOperations.pkl")
-//}
-
 paths {
-	"./"
+	"."
 }
-
-// paths vs on ? let both ?
-
-// shift arguments ?
 
 commands {
-	["eval"] {
-
-	}
-}
-
-on {
-	["eval"] {
-
+	["test"] {
+		"cedpm MathOps {{arguments}}"
 	}
 }
 
 before {
 	["install"] {
-		"./analyse_machine.sh"
-		"cedpm build"
+		"git submodule init"
 	}
 	["uninstall"] {
 		"cedpm clean"
 	}
-	["eval"] {
-		"source env/*.sh"
+}
+
+after {
+	["instal"] {
+		"cedpm build"
 	}
 }
 

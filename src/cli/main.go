@@ -10,6 +10,7 @@ import (
 	"cedpm.org/internal"
 	"cedpm.org/builtins"
 	"path"
+	"path/filepath"
 )
 
 const version = "1.0.0"
@@ -65,11 +66,13 @@ func main() {
 		return
 	}
 
+
 	// Require project file
 
 	projectDir, err := project_manifest.FindProjectDir(currentDir)
 	if err != nil {
-		fmt.Println("Unable to use project file:", err)
+		fmt.Println("Unable to find a 'Project' file in current or parent directories.")
+		panic(err);
 		return
 	}
 
@@ -89,20 +92,52 @@ func main() {
 
 	// Complex arguments that use the project file
 
+	// maybe: hardcode only install no arg, and let command system for the rest
+
+	// read 'Project' file, set up user hooks
+	var cmdLst project_manifest.CommandList
+
+	err = project_manifest.ParseProjectAddons(jsonData, &cmdLst)
+	if err != nil {
+		panic(err)
+	}
+
 	if os.Args[1] == "install" {
 		if len(os.Args) == 2 {
-			builtins.Install(projectDir)
 
+			// TODO: maybe allow before install for user-provided commands only ?
+
+			builtins.Install(projectDir)
 			internal.Debug("Project dependancies installed successfully.")
+
+			// TODO: trigger after install commands
 			return
 		}
-		// TODO : add support for package name
+	}
 
-		fmt.Printf("Usage: %s install\n", os.Args[0])
-		return
+	// at this point, cedpm install shall be ran first
+	if _, err := os.Stat(filepath.Join(projectDir, ".dependencies.json")); err != nil {
+		fmt.Fprintln(os.Stderr, "Please run 'cedpm install' first")
+		panic(err)
+	}
+
+	deps, err := project_manifest.GetResolvedDependencies(projectDir)
+	if err != nil {
+		panic(err)
+	}
+
+	err = project_manifest.ParseDependenciesAddons(deps, &cmdLst);
+	if err != nil {
+		panic(err)
+	}
+
+	err = builtins.TryUserCommand(cmdLst, os.Args)
+	if err != nil {
+		panic(err)
 	}
 	return
-
+/*
+TODO: replace this with a user built in
 	if os.Args[1] == "eval" {
 		if len(os.Args) != 3 {
 			fmt.Printf("Usage: %s eval <filename>", os.Args[0])
@@ -112,7 +147,7 @@ func main() {
 		builtins.EvaluateFile(os.Args[2], projectDir);
 		return
 	}
-
+*/
 	// lire le .dependencies json
 	// puis lire tout les Project Manifest,
 	// fournir les commandes

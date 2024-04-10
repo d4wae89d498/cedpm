@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"os"
 	"cedpm.org/internal"
-	"cedpm.org/io"
+	"cedpm.org/utils"
 )
 
 func Init(projectDir string) error {
@@ -17,7 +17,7 @@ func Init(projectDir string) error {
 	sourceDir := filepath.Join(exeDir, "..", "cedpm_skeleton")
 	destDir := filepath.Join(projectDir, ".cedpm")
 
-	err = io.CopyDir(sourceDir, destDir)
+	err = utils.CopyDir(sourceDir, destDir)
 	if err != nil {
 		return err
 	}

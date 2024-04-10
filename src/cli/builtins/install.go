@@ -6,6 +6,8 @@ import (
 //	"evaluator"
 	"path/filepath"
 	"os/exec"
+	"cedpm.org/project_manifest"
+	"cedpm.org/internal"
 )
 
 func Install(projectDir string) {
@@ -28,16 +30,6 @@ func Install(projectDir string) {
 		panic(err)
 	}
 
-	// Ensure the symlink and the .deps.json file are cleaned up afterwards.
-	defer func() {
-		if err := os.Remove(pklProjectPath); err != nil && !os.IsNotExist(err) {
-			panic(err)
-		}
-		if err := os.Rename(symlinkPath, depsFile); err != nil {
-			panic(err)
-		}
-	}()
-
 	pklPath := "pkl"
 	pklExecEnv := os.Getenv("PKL_EXEC")
 	if pklExecEnv != "" {
@@ -46,7 +38,23 @@ func Install(projectDir string) {
 
 	cmd := exec.Command(pklPath, "project", "resolve")
 	cmd.Dir = projectDir
-	if err := cmd.Run(); err != nil {
+	cmdErr := cmd.Run();
+
+	if err := os.Remove(pklProjectPath); err != nil && !os.IsNotExist(err) {
+		panic(err)
+	}
+	if err := os.Rename(symlinkPath, depsFile); err != nil {
+		panic(err)
+	}
+
+	if cmdErr != nil {
+		panic(cmdErr)
+	}
+
+	internal.Debug("Downloading dependencies ...")
+
+	err := project_manifest.DownloadDependencies(projectDir);
+	if err != nil {
 		panic(err)
 	}
 }
