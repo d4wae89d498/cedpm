@@ -15,7 +15,7 @@ paths {
 
 commands {
 	["test"] {
-		"cedpm MathOps {{arguments}}"
+		"echo HELLO {{@}}"
 	}
 }
 
@@ -29,7 +29,7 @@ before {
 }
 
 after {
-	["instal"] {
+	["install"] {
 		"cedpm build"
 	}
 }

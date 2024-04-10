@@ -147,9 +147,7 @@ func main() {
 
 	fmt.Println(cmdLst)
 
-	return
-
-	err = builtins.TryUserCommand(cmdLst, os.Args)
+	err = builtins.TryUserCommand(cmdLst, os.Args[1:])
 	if err != nil {
 		panic(err)
 	}
